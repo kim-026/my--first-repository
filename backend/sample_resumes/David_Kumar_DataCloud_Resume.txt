@@ -1,0 +1,26 @@
+David Kumar
+david.kumar.data@example.com | +1 (512) 440-3321 | Austin, TX
+linkedin.com/in/david-kumar-cloud | github.com/davidkumar-data
+
+PROFESSIONAL SUMMARY
+Data Engineer with 3+ years experience engineering scalable ETL data pipelines, distributed computing with Spark, and cloud infrastructure on GCP and AWS.
+
+SKILLS
+Big Data & Cloud: Apache Spark, Hadoop, Kafka, GCP, AWS, Cloud Computing, Docker, Kubernetes, Terraform
+Databases: SQL, PostgreSQL, MySQL, BigQuery, Cassandra
+Languages: Python, SQL, Java, Bash
+Practices: CI/CD, Data Engineering, Linux, Git, Problem Solving, Adaptability
+
+EXPERIENCE
+Data Engineer | DataMesh Solutions (2022 - Present)
+- Designed streaming ETL data pipelines using Apache Spark, Kafka, and Google Cloud BigQuery.
+- Built automated data quality validation monitors using Python and SQL.
+
+Junior Cloud Engineer | Austin CloudWorks (2021 - 2022)
+- Managed Kubernetes clusters and Terraform infrastructure provisioning for client analytics workloads.
+
+EDUCATION
+Bachelor of Technology in Information Technology | UT Austin (2021)
+
+CERTIFICATIONS
+- Google Professional Data Engineer (2023)

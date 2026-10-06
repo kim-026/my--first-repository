@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Expense Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f2f4fa;
+            --card: #ffffff;
+            --ink: #1b2340;
+            --muted: #6b7391;
+            --line: #e1e5f0;
+            --accent: #4b4fe0;
+            --income: #1f9d74;
+            --expense: #d9483b;
+            --radius: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+            line-height: 1.5;
+        }
+
+        main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 24px 16px 64px;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            margin: 0 0 20px;
+        }
+
+        h2 {
+            font-size: 1.05rem;
+            margin: 0 0 12px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+            align-items: stretch;
+        }
+
+        .summary .card {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 104px;
+            position: relative;
+        }
+
+        .card-head-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .label {
+            color: var(--muted);
+            font-size: .85rem;
+        }
+
+        .big {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .income {
+            color: var(--income);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .income.income-pop {
+            transform: scale(1.15);
+            text-shadow: 0 0 16px rgba(31, 157, 116, 0.4);
+        }
+
+        .expense {
+            color: var(--expense);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        form {
+            display: grid;
+            gap: 10px;
+        }
+
+        input,
+        select,
+        button {
+            font: inherit;
+            padding: 10px 12px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #fff;
+            color: var(--ink);
+        }
+
+        input:focus,
+        select:focus,
+        button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 1px;
+        }
+
+        button {
+            background: var(--accent);
+            color: #fff;
+            border: 0;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        button:hover {
+            filter: brightness(1.08);
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .bar {
+            height: 10px;
+            background: var(--line);
+            border-radius: 99px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .bar>span {
+            display: block;
+            height: 100%;
+            background: var(--accent);
+            transition: width .3s;
+        }
+
+        .bar.over>span {
+            background: var(--expense);
+        }
+
+        .cat {
+            margin-bottom: 10px;
+        }
+
+        .cat-head {
+            display: flex;
+            justify-content: space-between;
+            font-size: .9rem;
+        }
+
+        .cat .bar {
+            height: 6px;
+            margin: 4px 0 0;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        li:last-child {
+            border-bottom: 0;
+        }
+
+        .desc {
+            font-weight: 500;
+        }
+
+        .meta {
+            color: var(--muted);
+            font-size: .8rem;
+        }
+
+        .del {
+            background: none;
+            color: var(--muted);
+            padding: 4px 8px;
+            font-size: 1.1rem;
+        }
+
+        .del:hover {
+            color: var(--expense);
+            filter: none;
+        }
+
+        .empty {
+            color: var(--muted);
+            padding: 8px 0;
+        }
+
+        .budget-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .budget-row input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        @media (max-width: 680px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cartoon Character Mascot & Celebration Styles */
+        .card-income {
+            position: relative;
+            overflow: visible !important;
+            padding-right: 90px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .card-income.income-glow {
+            border-color: #10b981;
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.38);
+            animation: cardGlowPulse 1.25s ease-out;
+        }
+
+        @keyframes cardGlowPulse {
+            0% {
+                box-shadow: 0 0 0 rgba(16, 185, 129, 0);
+            }
+
+            35% {
+                box-shadow: 0 0 30px rgba(16, 185, 129, 0.45);
+            }
+
+            100% {
+                box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+            }
+        }
+
+        .mascot-controls {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .mascot-btn {
+            background: #eef2ff;
+            color: #4338ca;
+            border: 1px solid #c7d2fe;
+            border-radius: 99px;
+            padding: 2px 7px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            line-height: 1.2;
+            transition: all 0.15s ease;
+        }
+
+        .mascot-btn:hover {
+            background: #e0e7ff;
+            transform: scale(1.05);
+            filter: none;
+        }
+
+        .mascot-btn:active {
+            transform: scale(0.95);
+        }
+
+        .income-floating-pill {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #10b981;
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 99px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            pointer-events: none;
+            opacity: 0;
+            z-index: 25;
+        }
+
+        .income-floating-pill.animate {
+            animation: floatUpPill 1.6s ease-out forwards;
+        }
+
+        @keyframes floatUpPill {
+            0% {
+                opacity: 0;
+                transform: translateY(10px) scale(0.7);
+            }
+
+            25% {
+                opacity: 1;
+                transform: translateY(-2px) scale(1.08);
+            }
+
+            70% {
+                opacity: 1;
+                transform: translateY(-16px) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.85);
+            }
+        }
+
+        /* Mascot Perch & Character */
+        .mascot-perch {
+            position: absolute;
+            right: 6px;
+            bottom: 4px;
+            width: 82px;
+            height: 90px;
+            cursor: pointer;
+            user-select: none;
+            z-index: 10;
+        }
+
+        .mascot-character {
+            width: 100%;
+            height: 100%;
+            transform-origin: 50% 98px;
+            animation: kipBreathe 3s ease-in-out infinite;
+            transition: filter 0.2s;
+        }
+
+        .mascot-perch:hover .mascot-character {
+            filter: drop-shadow(0 4px 10px rgba(245, 158, 11, 0.35));
+        }
+
+        .kip-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Speech Bubble */
+        .mascot-speech {
+            position: absolute;
+            bottom: 84px;
+            right: -8px;
+            background: #1b2340;
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 5px 9px;
+            border-radius: 12px;
+            white-space: nowrap;
+            pointer-events: none;
+            box-shadow: 0 6px 18px rgba(27, 35, 64, 0.22);
+            opacity: 0;
+            transform: translateY(6px) scale(0.85);
+            transition: opacity 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 30;
+        }
+
+        .mascot-speech::after {
+            content: "";
+            position: absolute;
+            bottom: -4px;
+            right: 28px;
+            width: 8px;
+            height: 8px;
+            background: #1b2340;
+            transform: rotate(45deg);
+            border-radius: 2px;
+        }
+
+        .mascot-speech.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Face Expression Toggle */
+        .face-jump {
+            display: none;
+        }
+
+        .face-default {
+            display: block;
+        }
+
+        .mascot-character.jumping .face-default {
+            display: none;
+        }
+
+        .mascot-character.jumping .face-jump {
+            display: block;
+        }
+
+        /* Character Keyframe Animations */
+        @keyframes kipBreathe {
+
+            0%,
+            100% {
+                transform: translateY(0px) scale(1, 1);
+            }
+
+            50% {
+                transform: translateY(-2.5px) scale(1.02, 0.98);
+            }
+        }
+
+        @keyframes eyeBlink {
+
+            0%,
+            93%,
+            100% {
+                transform: scaleY(1);
+            }
+
+            95%,
+            97% {
+                transform: scaleY(0.08);
+            }
+        }
+
+        .kip-eye-l,
+        .kip-eye-r {
+            transform-origin: 50% 44px;
+            animation: eyeBlink 3.8s ease-in-out infinite;
+        }
+
+        @keyframes tailWag {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(-14deg);
+            }
+        }
+
+        .kip-tail {
+            transform-origin: 28px 84px;
+            animation: tailWag 2s ease-in-out infinite;
+        }
+
+        @keyframes earTwitch {
+
+            0%,
+            88%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            92% {
+                transform: rotate(-9deg);
+            }
+
+            96% {
+                transform: rotate(6deg);
+            }
+        }
+
+        .kip-ear-l {
+            transform-origin: 30px 28px;
+            animation: earTwitch 3.2s ease-in-out infinite;
+        }
+
+        .kip-ear-r {
+            transform-origin: 70px 28px;
+            animation: earTwitch 3.2s ease-in-out infinite 0.25s;
+        }
+
+        .mascot-character.perked {
+            transform: translateY(-4px) scale(1.05) !important;
+            filter: drop-shadow(0 4px 12px rgba(16, 185, 129, 0.45));
+            transition: all 0.3s ease;
+        }
+
+        /* Super Rocket Jump Animation */
+        @keyframes kipRocketJump {
+            0% {
+                transform: translateY(0) scale(1, 1) rotate(0deg);
+            }
+
+            12% {
+                /* Squash preparation */
+                transform: translateY(12px) scale(1.28, 0.72) rotate(0deg);
+            }
+
+            28% {
+                /* Launching up */
+                transform: translateY(-75px) scale(0.85, 1.25) rotate(-15deg);
+            }
+
+            50% {
+                /* Peak Apex - full 360 flip high in the sky! */
+                transform: translateY(-145px) scale(1.12, 1.1) rotate(360deg);
+            }
+
+            72% {
+                /* Diving down */
+                transform: translateY(-25px) scale(0.9, 1.2) rotate(360deg);
+            }
+
+            84% {
+                /* Landing squishy squash */
+                transform: translateY(10px) scale(1.36, 0.68) rotate(360deg);
+            }
+
+            92% {
+                /* Rebound spring bounce */
+                transform: translateY(-10px) scale(0.96, 1.08) rotate(360deg);
+            }
+
+            100% {
+                /* Settle smoothly */
+                transform: translateY(0) scale(1, 1) rotate(360deg);
+            }
+        }
+
+        @keyframes shadowJump {
+            0% {
+                transform: scale(1);
+                opacity: 0.14;
+            }
+
+            12% {
+                transform: scale(1.2);
+                opacity: 0.22;
+            }
+
+            50% {
+                transform: scale(0.25);
+                opacity: 0.03;
+            }
+
+            84% {
+                transform: scale(1.3);
+                opacity: 0.25;
+            }
+
+            92% {
+                transform: scale(0.9);
+                opacity: 0.12;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0.14;
+            }
+        }
+
+        .mascot-character.jumping {
+            animation: kipRocketJump 1.25s cubic-bezier(0.2, 0.9, 0.3, 1) forwards !important;
+        }
+
+        .mascot-perch.jumping .kip-shadow {
+            animation: shadowJump 1.25s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+            transform-origin: 50px 103px;
+        }
+
+        /* Particle Overlay Canvas */
+        #celebrationCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 99999;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Fullscreen Particle Explosion Canvas -->
+    <canvas id="celebrationCanvas"></canvas>
+
+    <main>
+        <h1>Expense Tracker</h1>
+
+        <section class="summary">
+            <div class="card">
+                <div class="label">Balance</div>
+                <div class="big" id="balance">₹0</div>
+            </div>
+            <div class="card card-income" id="incomeCard">
+                <div class="card-head-row">
+                    <div class="label">Income</div>
+                    <div class="mascot-controls">
+                        <button type="button" class="mascot-btn" id="soundToggleBtn"
+                            title="Sound: ON (Click to toggle)">🔊</button>
+                        <button type="button" class="mascot-btn" id="testJumpBtn" title="Test celebration jump">🦘
+                            Jump</button>
+                    </div>
+                </div>
+                <div class="big income" id="income">₹0</div>
+                <div class="income-floating-pill" id="incomeFloatingPill"></div>
+
+                <!-- Unique Cartoon Character: Kip the Golden Fortune Cat -->
+                <div class="mascot-perch" id="mascotPerch" title="Click Kip to cheer him up!">
+                    <div class="mascot-speech" id="mascotSpeech">
+                        <span id="speechText">I jump for income! 🦘</span>
+                    </div>
+                    <div class="mascot-character" id="mascotCharacter">
+                        <svg viewBox="0 0 100 110" class="kip-svg" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="kipGold" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#FDE047" />
+                                    <stop offset="50%" stop-color="#F59E0B" />
+                                    <stop offset="100%" stop-color="#D97706" />
+                                </linearGradient>
+                                <linearGradient id="coinGrad" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#FEF08A" />
+                                    <stop offset="50%" stop-color="#FBBF24" />
+                                    <stop offset="100%" stop-color="#B45309" />
+                                </linearGradient>
+                                <linearGradient id="earPink" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#FDA4AF" />
+                                    <stop offset="100%" stop-color="#F43F5E" />
+                                </linearGradient>
+                                <linearGradient id="crownGrad" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#FDE047" />
+                                    <stop offset="100%" stop-color="#F59E0B" />
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Ground Shadow -->
+                            <ellipse cx="50" cy="103" rx="27" ry="5.5" fill="rgba(27, 35, 64, 0.14)"
+                                class="kip-shadow" />
+
+                            <!-- Character Group -->
+                            <g class="kip-body-group">
+                                <!-- Tail -->
+                                <path class="kip-tail" d="M28 84 C12 84 8 70 16 60 C22 53 28 63 24 71" fill="none"
+                                    stroke="#F59E0B" stroke-width="7" stroke-linecap="round" />
+                                <circle cx="16" cy="60" r="3.8" fill="#FFFBEB" />
+
+                                <!-- Bottom Paws -->
+                                <ellipse cx="36" cy="98" rx="8.5" ry="6" fill="#F59E0B" stroke="#D97706"
+                                    stroke-width="1.5" />
+                                <ellipse cx="64" cy="98" rx="8.5" ry="6" fill="#F59E0B" stroke="#D97706"
+                                    stroke-width="1.5" />
+                                <ellipse cx="36" cy="98" rx="4.5" ry="3" fill="#FDA4AF" />
+                                <ellipse cx="64" cy="98" rx="4.5" ry="3" fill="#FDA4AF" />
+
+                                <!-- Body -->
+                                <path
+                                    d="M50 24 C28 24 20 42 20 62 C20 84 32 98 50 98 C68 98 80 84 80 62 C80 42 72 24 50 24 Z"
+                                    fill="url(#kipGold)" stroke="#D97706" stroke-width="2.5" stroke-linejoin="round" />
+
+                                <!-- Belly Cream Patch -->
+                                <ellipse cx="50" cy="74" rx="20" ry="17" fill="#FFFBEB" />
+
+                                <!-- Left Ear -->
+                                <path class="kip-ear-l" d="M30 32 C26 14 18 10 20 6 C24 2 38 16 38 28 Z"
+                                    fill="url(#kipGold)" stroke="#D97706" stroke-width="2" stroke-linejoin="round" />
+                                <path class="kip-ear-l-inner" d="M28 26 C26 16 22 13 22 10 C25 8 33 16 33 24 Z"
+                                    fill="url(#earPink)" />
+
+                                <!-- Right Ear -->
+                                <path class="kip-ear-r" d="M70 32 C74 14 82 10 80 6 C76 2 62 16 62 28 Z"
+                                    fill="url(#kipGold)" stroke="#D97706" stroke-width="2" stroke-linejoin="round" />
+                                <path class="kip-ear-r-inner" d="M72 26 C74 16 78 13 78 10 C75 8 67 16 67 24 Z"
+                                    fill="url(#earPink)" />
+
+                                <!-- Tilted Golden Crown -->
+                                <g transform="translate(49, 13) rotate(14)">
+                                    <path d="M-9 8 L-13 -2 L-6 2 L0 -6 L6 2 L13 -2 L9 8 Z" fill="url(#crownGrad)"
+                                        stroke="#B45309" stroke-width="1.3" stroke-linejoin="round" />
+                                    <circle cx="0" cy="2" r="2.2" fill="#10B981" stroke="#047857" stroke-width="0.8" />
+                                    <circle cx="-13" cy="-2" r="1.3" fill="#EF4444" />
+                                    <circle cx="13" cy="-2" r="1.3" fill="#EF4444" />
+                                    <circle cx="0" cy="-6" r="1.6" fill="#3B82F6" />
+                                </g>
+
+                                <!-- Lucky Rupee Coin Medallion -->
+                                <path d="M38 65 Q50 71 62 65" fill="none" stroke="#E11D48" stroke-width="2.6"
+                                    stroke-linecap="round" />
+                                <circle cx="50" cy="74" r="11" fill="url(#coinGrad)" stroke="#B45309"
+                                    stroke-width="1.4" />
+                                <circle cx="50" cy="74" r="8.8" fill="none" stroke="#FEF08A" stroke-width="0.8"
+                                    stroke-dasharray="2,1.5" />
+                                <text x="50" y="78.5" font-family="'DM Sans', system-ui, sans-serif" font-weight="900"
+                                    font-size="12" fill="#78350F" text-anchor="middle">₹</text>
+
+                                <!-- Cheeks and Whiskers -->
+                                <ellipse cx="32" cy="56" rx="6" ry="4" fill="#FDA4AF" opacity="0.85" />
+                                <ellipse cx="68" cy="56" rx="6" ry="4" fill="#FDA4AF" opacity="0.85" />
+                                <path d="M30 54 L34 54 M32 52 L32 56" stroke="#FFFFFF" stroke-width="1.2"
+                                    stroke-linecap="round" />
+                                <path d="M66 54 L70 54 M68 52 L68 56" stroke="#FFFFFF" stroke-width="1.2"
+                                    stroke-linecap="round" />
+                                <line x1="20" y1="53" x2="10" y2="51" stroke="#D97706" stroke-width="1.6"
+                                    stroke-linecap="round" />
+                                <line x1="20" y1="57" x2="11" y2="58" stroke="#D97706" stroke-width="1.6"
+                                    stroke-linecap="round" />
+                                <line x1="80" y1="53" x2="90" y2="51" stroke="#D97706" stroke-width="1.6"
+                                    stroke-linecap="round" />
+                                <line x1="80" y1="57" x2="89" y2="58" stroke="#D97706" stroke-width="1.6"
+                                    stroke-linecap="round" />
+
+                                <!-- Button Nose -->
+                                <path d="M48 52 Q50 50 52 52 Q50 55 48 52 Z" fill="#F43F5E" />
+
+                                <!-- DEFAULT IDLE EXPRESSION -->
+                                <g class="face-default">
+                                    <!-- Kitty Smile -->
+                                    <path d="M45 56 Q50 60 50 57 Q50 60 55 56" fill="none" stroke="#78350F"
+                                        stroke-width="2" stroke-linecap="round" />
+                                    <!-- Big Sparkling Anime Eyes -->
+                                    <g class="kip-eye-l">
+                                        <ellipse cx="37" cy="44" rx="6.5" ry="8" fill="#1E1B4B" />
+                                        <ellipse cx="37" cy="45" rx="5" ry="5.5" fill="#312E81" />
+                                        <circle cx="35" cy="41" r="2.8" fill="#FFFFFF" />
+                                        <circle cx="39" cy="47" r="1.3" fill="#FFFFFF" />
+                                        <path d="M30 38 Q37 34 44 38" fill="none" stroke="#78350F" stroke-width="2"
+                                            stroke-linecap="round" />
+                                    </g>
+                                    <g class="kip-eye-r">
+                                        <ellipse cx="63" cy="44" rx="6.5" ry="8" fill="#1E1B4B" />
+                                        <ellipse cx="63" cy="45" rx="5" ry="5.5" fill="#312E81" />
+                                        <circle cx="61" cy="41" r="2.8" fill="#FFFFFF" />
+                                        <circle cx="65" cy="47" r="1.3" fill="#FFFFFF" />
+                                        <path d="M56 38 Q63 34 70 38" fill="none" stroke="#78350F" stroke-width="2"
+                                            stroke-linecap="round" />
+                                    </g>
+                                    <!-- Idle Paws on Chest -->
+                                    <ellipse cx="36" cy="72" rx="5.5" ry="4.5" fill="#F59E0B" stroke="#D97706"
+                                        stroke-width="1.3" />
+                                    <ellipse cx="64" cy="72" rx="5.5" ry="4.5" fill="#F59E0B" stroke="#D97706"
+                                        stroke-width="1.3" />
+                                </g>
+
+                                <!-- CELEBRATION JUMP EXPRESSION -->
+                                <g class="face-jump">
+                                    <!-- Wide Open Happy Shouting Mouth -->
+                                    <path d="M43 55 Q50 53 57 55 Q57 68 50 68 Q43 68 43 55 Z" fill="#991B1B"
+                                        stroke="#78350F" stroke-width="1.5" />
+                                    <path d="M46 62 Q50 58 54 62 Q50 67 46 62 Z" fill="#FB7185" />
+                                    <!-- Starry Joy Eyes -->
+                                    <path d="M30 45 Q37 35 44 45" fill="none" stroke="#78350F" stroke-width="2.8"
+                                        stroke-linecap="round" />
+                                    <path d="M37 35 L37 40 M34 37.5 L40 37.5" stroke="#FBBF24" stroke-width="1.8"
+                                        stroke-linecap="round" />
+                                    <path d="M56 45 Q63 35 70 45" fill="none" stroke="#78350F" stroke-width="2.8"
+                                        stroke-linecap="round" />
+                                    <path d="M63 35 L63 40 M60 37.5 L66 37.5" stroke="#FBBF24" stroke-width="1.8"
+                                        stroke-linecap="round" />
+                                    <!-- Arms Raised High in Victory with Gold Coins -->
+                                    <path d="M26 64 Q12 50 16 36" fill="none" stroke="#F59E0B" stroke-width="6.5"
+                                        stroke-linecap="round" />
+                                    <ellipse cx="16" cy="35" rx="5" ry="4.5" fill="#F59E0B" stroke="#D97706"
+                                        stroke-width="1.3" />
+                                    <circle cx="15" cy="28" r="6" fill="url(#coinGrad)" stroke="#B45309"
+                                        stroke-width="1" />
+                                    <text x="15" y="31.5" font-size="7" font-weight="900" fill="#78350F"
+                                        text-anchor="middle">₹</text>
+
+                                    <path d="M74 64 Q88 50 84 36" fill="none" stroke="#F59E0B" stroke-width="6.5"
+                                        stroke-linecap="round" />
+                                    <ellipse cx="84" cy="35" rx="5" ry="4.5" fill="#F59E0B" stroke="#D97706"
+                                        stroke-width="1.3" />
+                                    <circle cx="85" cy="28" r="6" fill="url(#coinGrad)" stroke="#B45309"
+                                        stroke-width="1" />
+                                    <text x="85" y="31.5" font-size="7" font-weight="900" fill="#78350F"
+                                        text-anchor="middle">₹</text>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="label">Expenses</div>
+                <div class="big expense" id="expenses">₹0</div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Monthly budget</h2>
+            <div class="budget-row">
+                <input type="number" id="budgetInput" min="0" placeholder="Set your monthly limit">
+                <button id="saveBudget" type="button">Save budget</button>
+            </div>
+            <div class="bar" id="budgetBar"><span id="budgetFill" style="width:0%"></span></div>
+            <div class="label" id="budgetText">No budget set yet.</div>
+        </section>
+
+        <div class="grid">
+            <section class="card">
+                <h2>Add transaction</h2>
+                <form id="form">
+                    <input type="text" id="desc" placeholder="Description (e.g. Lunch)" required>
+                    <div class="row">
+                        <input type="number" id="amount" placeholder="Amount" min="0.01" step="0.01" required>
+                        <select id="type">
+                            <option value="expense">Expense</option>
+                            <option value="income">Income</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <select id="category">
+                            <option>Food</option>
+                            <option>Transport</option>
+                            <option>Study</option>
+                            <option>Shopping</option>
+                            <option>Bills</option>
+                            <option>Fun</option>
+                            <option>Salary / Allowance</option>
+                            <option>Other</option>
+                        </select>
+                        <input type="date" id="date" required>
+                    </div>
+                    <button type="submit">Add transaction</button>
+                </form>
+            </section>
+
+            <section class="card">
+                <h2>Spending by category</h2>
+                <div id="categories"></div>
+            </section>
+        </div>
+
+        <section class="card">
+            <h2>Transactions</h2>
+            <ul id="list"></ul>
+        </section>
+    </main>
+
+    <script>
+        const CURRENCY = "₹";
+        const KEY = "expenseTracker.v1";
+        const SOUND_KEY = "expenseTracker.sound";
+
+        // Load saved data (falls back to empty if storage is blocked or empty)
+        let state = { transactions: [], budget: 0 };
+        try {
+            const saved = JSON.parse(localStorage.getItem(KEY));
+            if (saved) state = saved;
+        } catch (e) { }
+
+        const save = () => {
+            try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { }
+        };
+        const money = n => CURRENCY + n.toLocaleString("en-IN", { maximumFractionDigits: 2 });
+        const $ = id => document.getElementById(id);
+
+        /* ----------------------------------------------------
+           Web Audio Synthesizer (Zero dependencies, offline)
+        ---------------------------------------------------- */
+        const SoundEngine = {
+            ctx: null,
+            muted: false,
+            init() {
+                if (!this.ctx && (window.AudioContext || window.webkitAudioContext)) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioCtx();
+                }
+            },
+            playJump() {
+                if (this.muted) return;
+                try {
+                    this.init();
+                    if (!this.ctx) return;
+                    if (this.ctx.state === "suspended") this.ctx.resume();
+                    const now = this.ctx.currentTime;
+
+                    // Cartoon Boing glide
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = "sine";
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.exponentialRampToValueAtTime(680, now + 0.32);
+
+                    gain.gain.setValueAtTime(0.24, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } catch (e) { }
+            },
+            playCoins() {
+                if (this.muted) return;
+                try {
+                    this.init();
+                    if (!this.ctx) return;
+                    if (this.ctx.state === "suspended") this.ctx.resume();
+                    const now = this.ctx.currentTime;
+
+                    // Sparkling 4-tone coin chime arpeggio: B5, E6, G#6, E7
+                    const notes = [987.77, 1318.51, 1661.22, 2637.02];
+                    notes.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        const start = now + idx * 0.07;
+
+                        osc.type = "triangle";
+                        osc.frequency.setValueAtTime(freq, start);
+
+                        gain.gain.setValueAtTime(0.2, start);
+                        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.24);
+
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(start);
+                        osc.stop(start + 0.25);
+                    });
+                } catch (e) { }
+            }
+        };
+
+        /* ----------------------------------------------------
+           Celebration Particle Canvas Engine (3D Coins & Stars)
+        ---------------------------------------------------- */
+        class CelebrationEngine {
+            constructor() {
+                this.canvas = document.getElementById("celebrationCanvas");
+                this.ctx = this.canvas ? this.canvas.getContext("2d") : null;
+                this.particles = [];
+                this.animId = null;
+                this.resize();
+                window.addEventListener("resize", () => this.resize());
+            }
+
+            resize() {
+                if (!this.canvas) return;
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            spawn(originX, originY, amount = 0) {
+                if (!this.ctx) return;
+                this.resize();
+                const coinCount = Math.min(26 + Math.floor(amount ? amount / 250 : 8), 50);
+                const starCount = 28;
+                const ribbonCount = 26;
+
+                // 1. Spinning 3D Golden Coins
+                for (let i = 0; i < coinCount; i++) {
+                    const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.6;
+                    const speed = 9 + Math.random() * 15;
+                    this.particles.push({
+                        type: "coin",
+                        x: originX + (Math.random() - 0.5) * 26,
+                        y: originY,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed,
+                        gravity: 0.55,
+                        spin: Math.random() * Math.PI,
+                        spinSpeed: 0.12 + Math.random() * 0.18,
+                        radius: 9 + Math.random() * 5,
+                        alpha: 1,
+                        decay: 0.007 + Math.random() * 0.007
+                    });
+                }
+
+                // 2. Glittering Diamond Stars
+                const starColors = ["#FBBF24", "#34D399", "#60A5FA", "#F472B6", "#A78BFA"];
+                for (let i = 0; i < starCount; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = 4 + Math.random() * 12;
+                    this.particles.push({
+                        type: "star",
+                        x: originX,
+                        y: originY - 35,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed,
+                        gravity: 0.14,
+                        rotation: Math.random() * Math.PI,
+                        rotSpeed: 0.08,
+                        size: 7 + Math.random() * 8,
+                        color: starColors[Math.floor(Math.random() * starColors.length)],
+                        alpha: 1,
+                        decay: 0.014 + Math.random() * 0.01
+                    });
+                }
+
+                // 3. Colorful Confetti Ribbons
+                const colors = ["#10B981", "#F59E0B", "#6366F1", "#EC4899", "#06B6D4"];
+                for (let i = 0; i < ribbonCount; i++) {
+                    const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.8;
+                    const speed = 7 + Math.random() * 14;
+                    this.particles.push({
+                        type: "ribbon",
+                        x: originX,
+                        y: originY,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed,
+                        gravity: 0.42,
+                        w: 5 + Math.random() * 4,
+                        h: 10 + Math.random() * 6,
+                        rotation: Math.random() * 360,
+                        rotSpeed: (Math.random() - 0.5) * 14,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        alpha: 1,
+                        decay: 0.011 + Math.random() * 0.008
+                    });
+                }
+
+                if (!this.animId) {
+                    this.animate();
+                }
+            }
+
+            animate() {
+                if (!this.ctx) return;
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const p = this.particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += p.gravity;
+                    p.alpha -= p.decay;
+
+                    if (p.alpha <= 0 || p.y > this.canvas.height + 40) {
+                        this.particles.splice(i, 1);
+                        continue;
+                    }
+
+                    this.ctx.save();
+                    this.ctx.globalAlpha = Math.max(0, p.alpha);
+
+                    if (p.type === "coin") {
+                        p.spin += p.spinSpeed;
+                        const scaleX = Math.cos(p.spin);
+                        this.ctx.translate(p.x, p.y);
+                        this.ctx.scale(scaleX, 1);
+
+                        // Outer gold coin rim
+                        this.ctx.beginPath();
+                        this.ctx.arc(0, 0, p.radius, 0, Math.PI * 2);
+                        this.ctx.fillStyle = "#D97706";
+                        this.ctx.fill();
+
+                        // Inner gold coin face
+                        this.ctx.beginPath();
+                        this.ctx.arc(0, 0, p.radius * 0.82, 0, Math.PI * 2);
+                        this.ctx.fillStyle = "#FDE047";
+                        this.ctx.fill();
+
+                        // Rupee currency sign
+                        if (Math.abs(scaleX) > 0.35) {
+                            this.ctx.font = `bold ${Math.floor(p.radius * 1.1)}px system-ui, sans-serif`;
+                            this.ctx.fillStyle = "#78350F";
+                            this.ctx.textAlign = "center";
+                            this.ctx.textBaseline = "middle";
+                            this.ctx.fillText("₹", 0, 1);
+                        }
+                    } else if (p.type === "star") {
+                        p.rotation += p.rotSpeed;
+                        this.ctx.translate(p.x, p.y);
+                        this.ctx.rotate(p.rotation);
+                        this.drawStar(0, 0, 4, p.size, p.size / 2.6, p.color);
+                    } else if (p.type === "ribbon") {
+                        p.rotation += p.rotSpeed;
+                        this.ctx.translate(p.x, p.y);
+                        this.ctx.rotate((p.rotation * Math.PI) / 180);
+                        this.ctx.fillStyle = p.color;
+                        this.ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    }
+
+                    this.ctx.restore();
+                }
+
+                if (this.particles.length > 0) {
+                    this.animId = requestAnimationFrame(() => this.animate());
+                } else {
+                    this.animId = null;
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                }
+            }
+
+            drawStar(cx, cy, spikes, outerRadius, innerRadius, color) {
+                let rot = (Math.PI / 2) * 3;
+                let x = cx;
+                let y = cy;
+                const step = Math.PI / spikes;
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(cx, cy - outerRadius);
+                for (let i = 0; i < spikes; i++) {
+                    x = cx + Math.cos(rot) * outerRadius;
+                    y = cy + Math.sin(rot) * outerRadius;
+                    this.ctx.lineTo(x, y);
+                    rot += step;
+
+                    x = cx + Math.cos(rot) * innerRadius;
+                    y = cy + Math.sin(rot) * innerRadius;
+                    this.ctx.lineTo(x, y);
+                    rot += step;
+                }
+                this.ctx.lineTo(cx, cy - outerRadius);
+                this.ctx.closePath();
+                this.ctx.fillStyle = color;
+                this.ctx.fill();
+            }
+        }
+
+        const celebrationSystem = new CelebrationEngine();
+
+        /* ----------------------------------------------------
+           Cartoon Mascot Jump & Speech System
+        ---------------------------------------------------- */
+        let isJumping = false;
+        let speechTimer = null;
+
+        const CELEBRATION_QUIPS = [
+            amt => `🎉 KA-CHING! +${money(amt)}!`,
+            amt => `💰 Money in the bank! +${money(amt)}!`,
+            amt => `🚀 To the moon! +${money(amt)}!`,
+            amt => `✨ Cha-ching! Treat yourself!`,
+            amt => `🥳 We're rolling in cash! +${money(amt)}!`,
+            amt => `💸 Payday vibes! +${money(amt)}!`
+        ];
+
+        const IDLE_QUIPS = [
+            "I jump when income comes! 🦘",
+            "Ready for payday! 💰",
+            "Feed me more income! 😋",
+            "Add income below to see my flip! 🤸",
+            "Watching your wealth grow! 📈",
+            "Click me to cheer! ✨"
+        ];
+
+        function showMascotSpeech(text, duration = 3000) {
+            const bubble = $("mascotSpeech");
+            const speechText = $("speechText");
+            if (!bubble || !speechText) return;
+
+            speechText.textContent = text;
+            bubble.classList.add("show");
+
+            clearTimeout(speechTimer);
+            if (duration > 0) {
+                speechTimer = setTimeout(() => {
+                    bubble.classList.remove("show");
+                }, duration);
+            }
+        }
+
+        function showFloatingPill(amount) {
+            const pill = $("incomeFloatingPill");
+            if (!pill) return;
+            pill.textContent = `+${money(amount)}`;
+            pill.classList.remove("animate");
+            void pill.offsetWidth; // Force CSS reflow
+            pill.classList.add("animate");
+        }
+
+        function triggerIncomeJump(amount = 0, isManual = false) {
+            if (isJumping) return;
+            isJumping = true;
+
+            const mascotChar = $("mascotCharacter");
+            const mascotPerch = $("mascotPerch");
+            const incomeCard = $("incomeCard");
+            const incomeEl = $("income");
+
+            // 1. Play synthesized cartoon sounds
+            SoundEngine.playJump();
+            setTimeout(() => SoundEngine.playCoins(), 300);
+
+            // 2. Add dynamic animation classes
+            mascotChar.classList.add("jumping");
+            mascotPerch.classList.add("jumping");
+            incomeCard.classList.add("income-glow");
+            incomeEl.classList.add("income-pop");
+
+            // 3. Speech bubble & floating banner
+            if (amount > 0) {
+                const quip = CELEBRATION_QUIPS[Math.floor(Math.random() * CELEBRATION_QUIPS.length)](amount);
+                showMascotSpeech(quip, 3800);
+                showFloatingPill(amount);
+            } else {
+                showMascotSpeech("Woohoo! Mega Jump! 🦘💨", 2800);
+            }
+
+            // 4. Particle explosion from Mascot location
+            if (mascotPerch) {
+                const rect = mascotPerch.getBoundingClientRect();
+                const originX = rect.left + rect.width / 2;
+                const originY = rect.top + rect.height / 3;
+                celebrationSystem.spawn(originX, originY, amount);
+            }
+
+            // 5. Reset after jump completes
+            setTimeout(() => {
+                mascotChar.classList.remove("jumping");
+                mascotPerch.classList.remove("jumping");
+                incomeCard.classList.remove("income-glow");
+                incomeEl.classList.remove("income-pop");
+                isJumping = false;
+            }, 1280);
+        }
+
+        /* ----------------------------------------------------
+           UI Interactions & Event Listeners
+        ---------------------------------------------------- */
+        $("date").valueAsDate = new Date();
+
+        // Sound Toggle Button setup
+        const soundBtn = $("soundToggleBtn");
+        let soundEnabled = localStorage.getItem(SOUND_KEY) !== "false";
+        SoundEngine.muted = !soundEnabled;
+        if (soundBtn) {
+            soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
+            soundBtn.title = soundEnabled ? "Sound: ON (Click to mute)" : "Sound: MUTED (Click to unmute)";
+
+            soundBtn.addEventListener("click", e => {
+                e.stopPropagation();
+                soundEnabled = !soundEnabled;
+                SoundEngine.muted = !soundEnabled;
+                soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
+                soundBtn.title = soundEnabled ? "Sound: ON (Click to mute)" : "Sound: MUTED (Click to unmute)";
+                try { localStorage.setItem(SOUND_KEY, soundEnabled); } catch (err) { }
+                if (soundEnabled) {
+                    SoundEngine.playJump();
+                }
+            });
+        }
+
+        // Test Jump Button
+        const testBtn = $("testJumpBtn");
+        if (testBtn) {
+            testBtn.addEventListener("click", e => {
+                e.stopPropagation();
+                triggerIncomeJump(5000, true);
+            });
+        }
+
+        // Mascot Click Interaction
+        const mascotPerch = $("mascotPerch");
+        if (mascotPerch) {
+            mascotPerch.addEventListener("click", () => {
+                triggerIncomeJump(0, true);
+            });
+
+            // Hover greetings
+            let hoverTimer = null;
+            mascotPerch.addEventListener("mouseenter", () => {
+                if (isJumping) return;
+                hoverTimer = setTimeout(() => {
+                    const quip = IDLE_QUIPS[Math.floor(Math.random() * IDLE_QUIPS.length)];
+                    showMascotSpeech(quip, 2500);
+                }, 300);
+            });
+
+            mascotPerch.addEventListener("mouseleave", () => {
+                clearTimeout(hoverTimer);
+            });
+        }
+
+        // Perk up mascot when user switches type dropdown to "income"
+        const typeSelect = $("type");
+        if (typeSelect) {
+            typeSelect.addEventListener("change", e => {
+                if (e.target.value === "income") {
+                    showMascotSpeech("Ooh! Is that income for me? 👀✨", 3200);
+                    const mascotChar = $("mascotCharacter");
+                    if (mascotChar) {
+                        mascotChar.classList.add("perked");
+                        setTimeout(() => mascotChar.classList.remove("perked"), 1200);
+                    }
+                }
+            });
+        }
+
+        // Main Transaction Form Submit
+        $("form").addEventListener("submit", e => {
+            e.preventDefault();
+            const desc = $("desc").value.trim();
+            const amount = parseFloat($("amount").value);
+            const type = $("type").value;
+            const category = $("category").value;
+            const date = $("date").value;
+
+            state.transactions.unshift({
+                id: Date.now(),
+                desc,
+                amount,
+                type,
+                category,
+                date
+            });
+            save();
+            e.target.reset();
+            $("date").valueAsDate = new Date();
+            render();
+
+            // Trigger cartoon mascot jump when income arrives!
+            if (type === "income") {
+                triggerIncomeJump(amount);
+            }
+        });
+
+        $("saveBudget").addEventListener("click", () => {
+            state.budget = parseFloat($("budgetInput").value) || 0;
+            save();
+            render();
+        });
+
+        function removeItem(id) {
+            state.transactions = state.transactions.filter(t => t.id !== id);
+            save();
+            render();
+        }
+
+        function render() {
+            const tx = state.transactions;
+            const income = tx.filter(t => t.type === "income").reduce((s, t) => s + t.amount, 0);
+            const expenses = tx.filter(t => t.type === "expense").reduce((s, t) => s + t.amount, 0);
+
+            $("income").textContent = money(income);
+            $("expenses").textContent = money(expenses);
+            $("balance").textContent = money(income - expenses);
+
+            // Budget: counts this month's expenses only
+            const now = new Date();
+            const monthPrefix = now.toISOString().slice(0, 7);
+            const monthSpent = tx
+                .filter(t => t.type === "expense" && t.date.startsWith(monthPrefix))
+                .reduce((s, t) => s + t.amount, 0);
+
+            if (state.budget > 0) {
+                const pct = Math.min((monthSpent / state.budget) * 100, 100);
+                $("budgetFill").style.width = pct + "%";
+                $("budgetBar").classList.toggle("over", monthSpent > state.budget);
+                const left = state.budget - monthSpent;
+                $("budgetText").textContent = left >= 0
+                    ? `${money(monthSpent)} spent this month. ${money(left)} left.`
+                    : `Over budget by ${money(-left)} this month.`;
+                $("budgetInput").value = state.budget;
+            } else {
+                $("budgetFill").style.width = "0%";
+                $("budgetBar").classList.remove("over");
+                $("budgetText").textContent = "No budget set yet.";
+            }
+
+            // Category breakdown (expenses only)
+            const totals = {};
+            tx.filter(t => t.type === "expense").forEach(t => {
+                totals[t.category] = (totals[t.category] || 0) + t.amount;
+            });
+            const cats = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+            $("categories").innerHTML = cats.length
+                ? cats.map(([name, amt]) => `
+          <div class="cat">
+            <div class="cat-head"><span>${name}</span><span>${money(amt)}</span></div>
+            <div class="bar"><span style="width:${(amt / expenses) * 100}%"></span></div>
+          </div>`).join("")
+                : '<div class="empty">Add an expense to see where your money goes.</div>';
+
+            // Transaction list
+            $("list").innerHTML = tx.length
+                ? tx.map(t => `
+          <li>
+            <div>
+              <div class="desc">${escapeHtml(t.desc)}</div>
+              <div class="meta">${t.category} · ${t.date}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <strong class="${t.type}">${t.type === "income" ? "+" : "-"}${money(t.amount)}</strong>
+              <button class="del" aria-label="Delete ${escapeHtml(t.desc)}" onclick="removeItem(${t.id})">×</button>
+            </div>
+          </li>`).join("")
+                : '<div class="empty">No transactions yet. Add your first one.</div>';
+        }
+
+        // Stops user text from being read as HTML
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+        }
+
+        render();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+Alex Chen
+alex.chen.ai@example.com | +1 (415) 890-1234 | San Francisco, CA
+linkedin.com/in/alex-chen-ml | github.com/alexchen-ai
+
+PROFESSIONAL SUMMARY
+Senior Machine Learning & Data Systems Engineer with 5+ years of experience designing, training, and deploying large-scale deep learning models, predictive pipelines, and automated NLP architectures.
+
+TECHNICAL SKILLS
+Programming Languages: Python, SQL, C++, Bash
+AI & Machine Learning: Machine Learning, Deep Learning, NLP, PyTorch, TensorFlow, Scikit-Learn, Pandas, NumPy, Keras, Hugging Face Transformers, LLM, Generative AI
+Data & Infrastructure: PostgreSQL, Redis, Apache Spark, Kafka, Docker, Kubernetes, AWS, Git, CI/CD, FastAPI
+Soft Skills: Team Collaboration, Leadership, Problem Solving, Agile, Mentorship
+
+WORK EXPERIENCE
+Senior Machine Learning Engineer | NeuralScale AI (2022 - Present)
+- Architected enterprise NLP question answering pipeline with PyTorch and Transformers, serving 2M daily requests.
+- Optimized model inference latency by 45% using ONNX runtime and Docker containerization on AWS EKS.
+- Led cross-functional team of 4 data scientists in building automated continuous retraining pipelines.
+
+Machine Learning Developer | Apex Data Labs (2019 - 2022)
+- Implemented customer churn prediction system using Python, Scikit-Learn, and SQL on PostgreSQL warehouse.
+- Built real-time feature store caching layer with Redis and FastAPI REST endpoints.
+
+EDUCATION
+Master of Science in Computer Science | Stanford University (2019)
+Bachelor of Science in Software Engineering | UC Berkeley (2017)
+
+CERTIFICATIONS
+- AWS Certified Solutions Architect (2023)
+- TensorFlow Developer Certificate (2022)
+- Deep Learning Specialization - Coursera (2021)

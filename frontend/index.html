@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Resume Screening & Candidate Assessment System</title>
+  <meta name="description"
+    content="From Any Document Upload to Final Evaluation – Smart Hiring Made Simple. Complete AI-powered resume parsing, skill matching, skill-tailored mock assessment, and recruiter dashboard.">
+
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-icon">
+          <i data-lucide="sparkles"></i>
+        </div>
+        <div class="brand-titles">
+          <h1 class="brand-title">AI Resume Screening & Assessment</h1>
+          <p class="brand-tagline">From Any Document Upload to Final Evaluation – Smart Hiring Made Simple</p>
+        </div>
+      </div>
+
+      <!-- Quick Switcher & Active Job Selector -->
+      <div class="header-actions">
+        <div class="active-job-badge" id="active-job-indicator" title="Selected Target Role">
+          <i data-lucide="briefcase"></i>
+          <span id="active-job-label">Target Role: Loading...</span>
+        </div>
+        <button class="btn btn-outline btn-sm" id="btn-dashboard-jump" onclick="switchPage(11)">
+          <i data-lucide="layout-dashboard"></i>
+          Recruiter Dashboard
+        </button>
+      </div>
+    </div>
+
+    <!-- 11-Step Interactive Workflow Stepper -->
+    <nav class="stepper-nav" aria-label="Workflow Navigation">
+      <div class="stepper-container">
+        <button class="step-btn active" data-page="1" onclick="switchPage(1)" title="Company & Job Requirements">
+          <span class="step-num">1</span>
+          <span class="step-text">Job Reqs</span>
+        </button>
+        <div class="step-line"></div>
+        <button class="step-btn" data-page="2" onclick="switchPage(2)" title="Candidate Upload">
+          <span class="step-num">2</span>
+          <span class="step-text">Upload</span>
+        </button>
+        <div class="step-line"></div>
+        <button class="step-btn" data-page="3" onclick="switchPage(3)" title="Resume Extraction">
+          <span class="step-num">3</span>
+          <span class="step-text">Extraction</span>
+        </button>
+        <div class="step-line"></div>
+        <button class="step-btn" data-page="4" onclick="switchPage(4)" title="Resume Matching">
+          <span class="step-num">4</span>
+          <span class="step-text">Matching</span>
+        </button>
+        <div class="step-line"></div>
+        <button class="step-btn" data-page="5" onclick="switchPage(5)" title="Skill Gap Summary">
+          <span class="step-num">5</span>
+          <span class="step-text">Skill Gap</span>
+        </button>
+        <div class="step-line"></div>
+        <button class="step-btn" data-page="6" onclick="switchPage(6)" title="Skill-based Mock Questions">
+          <span class="step-num">6</span>
+          <span class="step-text">Assessment</span>
+        </button>
+        <div class="step-line"></div>
+        <button class="step-btn" data-page="7" onclick="switchPage(7)" title="Candidate Answers">
+          <span class="step-num">7</span>
+          <span class="step-text">Answers</span>
+        </button>
+        <div class="step-line"></div>
+        <button class="step-btn" data-page="8" onclick="switchPage(8)" title="Answer Evaluation">
+          <span class="step-num">8</span>
+          <span class="step-text">Evaluation</span>
+        </button>
+        <div class="step-line"></div>
+        <button class="step-btn" data-page="9" onclick="switchPage(9)" title="Performance Scorecard">
+          <span class="step-num">9</span>
+          <span class="step-text">Performance</span>
+        </button>
+        <div class="step-line"></div>
+        <button class="step-btn" data-page="10" onclick="switchPage(10)" title="Candidate Dossier Profile">
+          <span class="step-num">10</span>
+          <span class="step-text">Profile</span>
+        </button>
+        <div class="step-line"></div>
+        <button class="step-btn" data-page="11" onclick="switchPage(11)" title="Recruiter Dashboard">
+          <span class="step-num">11</span>
+          <span class="step-text">Dashboard</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main View Area -->
+  <main class="main-content">
+
+    <!-- PAGE 1: COMPANY / ADMIN JOB REQUIREMENTS -->
+    <section id="page-1" class="workflow-page active">
+      <div class="page-header">
+        <div class="page-title-group">
+          <span class="page-badge">Step 1 of 11</span>
+          <h2>Company & Job Requirements Configuration</h2>
+          <p class="page-subtitle">Define company profile, target position requirements, mandatory and optional skills.
+          </p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-secondary" onclick="loadSampleJobPreset(0)">
+            <i data-lucide="sparkle"></i> Load ML Preset
+          </button>
+          <button class="btn btn-secondary" onclick="loadSampleJobPreset(1)">
+            <i data-lucide="code"></i> Load Full-Stack Preset
+          </button>
+        </div>
+      </div>
+
+      <div class="grid-2-col">
+        <!-- Form Column -->
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <h3><i data-lucide="building-2"></i> Enter Job Requirements</h3>
+            <span class="badge badge-purple">Admin Mode</span>
+          </div>
+          <div class="card-body">
+            <form id="form-job-requirements" onsubmit="handleSaveJob(event)">
+              <div class="form-group">
+                <label for="company-select">Select or Create Company *</label>
+                <div class="input-with-action">
+                  <select id="company-select" class="form-control" required onchange="handleCompanySelectChange()">
+                    <option value="">-- Choose Existing Company --</option>
+                  </select>
+                  <button type="button" class="btn btn-outline" onclick="toggleNewCompanyModal()">+ New</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="job-title-input">Job Title *</label>
+                <input type="text" id="job-title-input" class="form-control"
+                  placeholder="e.g. Senior Machine Learning Engineer" required>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="job-experience-input">Experience Requirement *</label>
+                  <input type="text" id="job-experience-input" class="form-control" placeholder="e.g. 3+ years"
+                    value="3+ years" required>
+                </div>
+                <div class="form-group col-6">
+                  <label for="job-education-input">Education Requirement *</label>
+                  <input type="text" id="job-education-input" class="form-control"
+                    placeholder="e.g. Bachelor's in CS or STEM" value="Bachelor's or Master's in Computer Science"
+                    required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="required-skills-input">
+                  Required Mandatory Skills *
+                  <small class="text-muted">(Comma-separated or press Enter)</small>
+                </label>
+                <div class="tag-input-container" id="required-skills-tags"></div>
+                <input type="text" id="required-skills-input" class="form-control tag-text-input"
+                  placeholder="e.g. Python, SQL, Machine Learning, PyTorch, Docker"
+                  onkeydown="handleTagKeyDown(event, 'required-skills')">
+                <div class="quick-tags-shelf" id="quick-tags-required">
+                  <span class="quick-tag-label">Quick Add:</span>
+                  <button type="button" class="tag-pill-suggest" onclick="addSkillTag('Python', 'required-skills')">+
+                    Python</button>
+                  <button type="button" class="tag-pill-suggest" onclick="addSkillTag('SQL', 'required-skills')">+
+                    SQL</button>
+                  <button type="button" class="tag-pill-suggest"
+                    onclick="addSkillTag('Machine Learning', 'required-skills')">+ Machine Learning</button>
+                  <button type="button" class="tag-pill-suggest" onclick="addSkillTag('React', 'required-skills')">+
+                    React</button>
+                  <button type="button" class="tag-pill-suggest" onclick="addSkillTag('Docker', 'required-skills')">+
+                    Docker</button>
+                  <button type="button" class="tag-pill-suggest" onclick="addSkillTag('AWS', 'required-skills')">+
+                    AWS</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="optional-skills-input">
+                  Optional / Bonus Skills
+                  <small class="text-muted">(Enhances candidate score)</small>
+                </label>
+                <div class="tag-input-container" id="optional-skills-tags"></div>
+                <input type="text" id="optional-skills-input" class="form-control tag-text-input"
+                  placeholder="e.g. Kubernetes, FastAPI, NLP, CI/CD"
+                  onkeydown="handleTagKeyDown(event, 'optional-skills')">
+              </div>
+
+              <div class="form-group">
+                <label for="job-description-input">Job Description & Responsibilities</label>
+                <textarea id="job-description-input" class="form-control" rows="4"
+                  placeholder="Detail the core duties, team structure, and impact of this role..."></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">
+                  <i data-lucide="check-circle-2"></i> Save & Select Job Requirement
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Saved Job Requirements Shelf -->
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <h3><i data-lucide="list"></i> Available Active Positions</h3>
+            <span class="badge badge-blue" id="available-jobs-count">0 Positions</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted text-sm mb-3">Click any position below to set it as the active job requirement for
+              screening.</p>
+            <div class="jobs-list-shelf" id="jobs-list-shelf">
+              <!-- Dynamically rendered jobs -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2: CANDIDATE UPLOAD -->
+    <section id="page-2" class="workflow-page">
+      <div class="page-header">
+        <div class="page-title-group">
+          <span class="page-badge">Step 2 of 11</span>
+          <h2>Candidate Resume & Document Upload</h2>
+          <p class="page-subtitle">Submit candidate details and upload documents in any common format.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline" onclick="loadSampleResumePreset('Alex_Chen_ML_Resume.txt')">
+            <i data-lucide="sparkles"></i> Load Demo: Alex Chen (ML)
+          </button>
+          <button class="btn btn-outline" onclick="loadSampleResumePreset('Sarah_Miller_FullStack_Resume.txt')">
+            <i data-lucide="sparkles"></i> Load Demo: Sarah Miller (Full-Stack)
+          </button>
+        </div>
+      </div>
+
+      <div class="upload-grid">
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <h3><i data-lucide="user-plus"></i> Candidate Information</h3>
+            <span class="badge badge-purple">Candidate Portal</span>
+          </div>
+          <div class="card-body">
+            <form id="form-upload-resume" onsubmit="handleResumeUploadSubmit(event)">
+              <div class="form-group">
+                <label for="candidate-name-input">Candidate Full Name</label>
+                <input type="text" id="candidate-name-input" class="form-control"
+                  placeholder="e.g. Alex Chen (or extracted automatically from resume)">
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="candidate-email-input">Email Address</label>
+                  <input type="email" id="candidate-email-input" class="form-control"
+                    placeholder="e.g. alex.chen@example.com">
+                </div>
+                <div class="form-group col-6">
+                  <label for="candidate-phone-input">Phone Number</label>
+                  <input type="text" id="candidate-phone-input" class="form-control"
+                    placeholder="e.g. +1 (415) 555-0192">
+                </div>
+              </div>
+
+              <!-- Drag and Drop Dropzone -->
+              <div class="form-group">
+                <label>Resume / Document File *</label>
+                <div class="dropzone" id="resume-dropzone" onclick="triggerFileInput()">
+                  <input type="file" lijd id="resume-file-input" style="display:none;"
+                    onchange="handleFileSelected(event)">
+                  <div class="dropzone-icon">
+                    <i data-lucide="upload-cloud"></i>
+                  </div>
+                  <h4>Drag and drop your resume here, or <span class="text-primary">browse files</span></h4>
+                  <p class="dropzone-meta">Supports PDF, DOC, DOCX, TXT, RTF, ODT, CSV, PPT, PPTX, XLS, XLSX, JPG, JPEG,
+                    PNG, HTML (Up to 15MB)</p>
+
+                  <div id="selected-file-display" class="selected-file-pill" style="display:none;">
+                    <i data-lucide="file-text"></i>
+                    <span id="selected-file-name">filename.pdf</span>
+                    <span id="selected-file-size" class="text-muted text-xs">(0 KB)</span>
+                    <button type="button" class="btn-icon" onclick="clearSelectedFile(event)">
+                      <i data-lucide="x"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="supported-formats-pills">
+                <span class="format-pill">PDF</span>
+                <span class="format-pill">DOCX</span>
+                <span class="format-pill">TXT</span>
+                <span class="format-pill">RTF</span>
+                <span class="format-pill">ODT</span>
+                <span class="format-pill">CSV</span>
+                <span class="format-pill">PPTX</span>
+                <span class="format-pill">XLSX</span>
+                <span class="format-pill">HTML</span>
+                <span class="format-pill">PNG/JPG</span>
+              </div>
+
+              <div class="form-actions mt-4">
+                <button type="submit" class="btn btn-primary btn-lg" id="btn-submit-upload">
+                  <i data-lucide="arrow-right"></i> Upload & Extract Resume
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Info / Tips Card -->
+        <div class="card card-accent shadow-sm">
+          <div class="card-header">
+            <h3><i data-lucide="cpu"></i> Smart AI/NLP Extraction Engine</h3>
+          </div>
+          <div class="card-body">
+            <div class="feature-item">
+              <div class="feature-icon"><i data-lucide="file-search"></i></div>
+              <div>
+                <h4>Multi-Format Document Parsing</h4>
+                <p class="text-muted text-sm">Deep text extraction from PDFs, Word docs, spreadsheets, slides, HTML, and
+                  images with automatic cleanup.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon"><i data-lucide="brain"></i></div>
+              <div>
+                <h4>Entity & Skill Taxonomy (300+ Skills)</h4>
+                <p class="text-muted text-sm">Categorizes technical frameworks, libraries, cloud architectures,
+                  methodologies, and soft skills.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon"><i data-lucide="target"></i></div>
+              <div>
+                <h4>Skill-Tailored Assessment Generation</h4>
+                <p class="text-muted text-sm">Strictly generates 4–6 interview questions based on the candidate's own
+                  extracted skills, not just job requirements.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 3: RESUME EXTRACTION -->
+    <section id="page-3" class="workflow-page">
+      <div class="page-header">
+        <div class="page-title-group">
+          <span class="page-badge">Step 3 of 11</span>
+          <h2>Resume Information Extraction</h2>
+          <p class="page-subtitle">Extracted candidate entities, technical skills, soft skills, education, experience,
+            and certifications.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary" onclick="proceedToMatching()">
+            <i data-lucide="git-compare"></i> Proceed to Resume Matching
+          </button>
+        </div>
+      </div>
+
+      <div class="extraction-layout" id="extraction-content-area">
+        <!-- Rendered dynamically -->
+        <div class="loading-state">
+          <i data-lucide="loader" class="spin"></i>
+          <p>Extracting candidate information using AI/NLP engine...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 4: RESUME MATCHING -->
+    <section id="page-4" class="workflow-page">
+      <div class="page-header">
+        <div class="page-title-group">
+          <span class="page-badge">Step 4 of 11</span>
+          <h2>Candidate Resume vs Job Description Matching</h2>
+          <p class="page-subtitle">Comparing candidate's extracted skills with company job requirements.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary" onclick="switchPage(5)">
+            <i data-lucide="arrow-right"></i> View Skill Gap Summary
+          </button>
+        </div>
+      </div>
+
+      <div class="matching-container" id="matching-content-area">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- PAGE 5: SKILL GAP SUMMARY -->
+    <section id="page-5" class="workflow-page">
+      <div class="page-header">
+        <div class="page-title-group">
+          <span class="page-badge">Step 5 of 11</span>
+          <h2>Skill Gap Summary & Upskilling Roadmap</h2>
+          <p class="page-subtitle">In-depth breakdown of possessed competencies, missing mandatory skills, and suggested
+            improvement areas.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary" onclick="proceedToAssessment()">
+            <i data-lucide="help-circle"></i> Generate Mock Assessment (From Candidate Skills)
+          </button>
+        </div>
+      </div>
+
+      <div class="skill-gap-container" id="skill-gap-content-area">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- PAGE 6: MOCK ASSESSMENT (QUESTIONS GENERATED FROM CANDIDATE SKILLS) -->
+    <section id="page-6" class="workflow-page">
+      <div class="page-header">
+        <div class="page-title-group">
+          <span class="page-badge">Step 6 of 11</span>
+          <h2>Mock Interview & Assessment Questions</h2>
+          <p class="page-subtitle">Generated 4–6 questions <strong>BASED ON THE CANDIDATE'S OWN EXTRACTED
+              SKILLS</strong>, not directly from company requirements.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline" onclick="regenerateMockQuestions()">
+            <i data-lucide="refresh-cw"></i> Regenerate Questions
+          </button>
+          <button class="btn btn-primary" onclick="switchPage(7)">
+            <i data-lucide="pen-tool"></i> Start Candidate Assessment
+          </button>
+        </div>
+      </div>
+
+      <div class="assessment-questions-container" id="questions-preview-area">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- PAGE 7: CANDIDATE ANSWERS -->
+    <section id="page-7" class="workflow-page">
+      <div class="page-header">
+        <div class="page-title-group">
+          <span class="page-badge">Step 7 of 11</span>
+          <h2>Candidate Answer Submission Portal</h2>
+          <p class="page-subtitle">Candidate types technical answers for each skill question.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-secondary" onclick="fillDemoAnswers()">
+            <i data-lucide="sparkles"></i> Auto-Fill Realistic Demo Answers
+          </button>
+        </div>
+      </div>
+
+      <div class="answers-portal-container" id="answers-portal-area">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- PAGE 8: ANSWER EVALUATION -->
+    <section id="page-8" class="workflow-page">
+      <div class="page-header">
+        <div class="page-title-group">
+          <span class="page-badge">Step 8 of 11</span>
+          <h2>AI + Rule-Based Answer Evaluation</h2>
+          <p class="page-subtitle">Per-question score out of 10, short feedback, correctness & relevance, and areas for
+            improvement.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary" onclick="switchPage(9)">
+            <i data-lucide="bar-chart-2"></i> View Performance Scorecard
+          </button>
+        </div>
+      </div>
+
+      <div class="evaluation-container" id="evaluation-content-area">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- PAGE 9: PERFORMANCE -->
+    <section id="page-9" class="workflow-page">
+      <div class="page-header">
+        <div class="page-title-group">
+          <span class="page-badge">Step 9 of 11</span>
+          <h2>Assessment Performance & Scorecard</h2>
+          <p class="page-subtitle">Q1–Q6 scores, Total Marks, Maximum Score, Overall Performance, and strong/improvement
+            areas.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary" onclick="proceedToFullProfile()">
+            <i data-lucide="user-check"></i> View Complete Candidate Profile
+          </button>
+        </div>
+      </div>
+
+      <div class="performance-container" id="performance-content-area">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- PAGE 10: CANDIDATE PROFILE -->
+    <section id="page-10" class="workflow-page">
+      <div class="page-header">
+        <div class="page-title-group">
+          <span class="page-badge">Step 10 of 11</span>
+          <h2>Complete 360° Candidate Profile</h2>
+          <p class="page-subtitle">Comprehensive dossier including resume, extracted info, match %, skill gap, mock Q&A,
+            and evaluation scores.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline" onclick="window.print()">
+            <i data-lucide="printer"></i> Print / Export Profile
+          </button>
+          <button class="btn btn-primary" onclick="switchPage(11)">
+            <i data-lucide="layout-dashboard"></i> Back to Recruiter Dashboard
+          </button>
+        </div>
+      </div>
+
+      <div class="profile-container" id="profile-content-area">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- PAGE 11: RECRUITER DASHBOARD -->
+    <section id="page-11" class="workflow-page">
+      <div class="page-header">
+        <div class="page-title-group">
+          <span class="page-badge">Step 11 of 11</span>
+          <h2>Recruiter & Admin Talent Dashboard</h2>
+          <p class="page-subtitle">Search, filter, compare candidates, view match rates, and download reports.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline" onclick="exportDashboardCSV()">
+            <i data-lucide="download"></i> Export CSV Report
+          </button>
+          <button class="btn btn-primary" onclick="switchPage(2)">
+            <i data-lucide="user-plus"></i> Screen New Candidate
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Stats Shelf -->
+      <div class="kpi-grid" id="kpi-stats-area">
+        <div class="kpi-card">
+          <div class="kpi-icon icon-blue"><i data-lucide="users"></i></div>
+          <div class="kpi-data">
+            <span class="kpi-value" id="kpi-total-candidates">0</span>
+            <span class="kpi-label">Total Candidates</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon icon-purple"><i data-lucide="briefcase"></i></div>
+          <div class="kpi-data">
+            <span class="kpi-value" id="kpi-total-jobs">0</span>
+            <span class="kpi-label">Active Job Roles</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon icon-emerald"><i data-lucide="percent"></i></div>
+          <div class="kpi-data">
+            <span class="kpi-value" id="kpi-avg-match">0%</span>
+            <span class="kpi-label">Average Match Rate</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon icon-amber"><i data-lucide="award"></i></div>
+          <div class="kpi-data">
+            <span class="kpi-value" id="kpi-shortlisted">0</span>
+            <span class="kpi-label">Shortlisted Candidates</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search, Filter & Toolbar -->
+      <div class="card shadow-sm mb-4">
+        <div class="dashboard-toolbar">
+          <div class="search-input-group">
+            <i data-lucide="search"></i>
+            <input type="text" id="dashboard-search-input"
+              placeholder="Search by candidate name, skill (e.g. Python, SQL), or role..."
+              oninput="handleDashboardSearch()">
+          </div>
+          <div class="filter-group">
+            <select id="filter-job-select" class="form-control" onchange="loadDashboardCandidates()">
+              <option value="">All Job Roles</option>
+            </select>
+            <select id="filter-sort-select" class="form-control" onchange="loadDashboardCandidates()">
+              <option value="match_percentage">Sort: Highest Match %</option>
+              <option value="assessment_score">Sort: Highest Assessment Score</option>
+              <option value="name">Sort: Candidate Name</option>
+              <option value="date">Sort: Most Recent</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Candidate Table -->
+        <div class="table-responsive">
+          <table class="table" id="candidates-dashboard-table">
+            <thead>
+              <tr>
+                <th>Candidate</th>
+                <th>Target Job</th>
+                <th>Match %</th>
+                <th>Matching Skills</th>
+                <th>Missing Skills</th>
+                <th>Assessment Score</th>
+                <th>Performance</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="candidates-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Candidate Comparison View Section -->
+      <div class="card shadow-sm mt-4" id="comparison-section" style="display:none;">
+        <div class="card-header">
+          <h3><i data-lucide="git-merge"></i> Side-by-Side Candidate Comparison</h3>
+          <button class="btn btn-outline btn-sm" onclick="clearCandidateComparison()">Close Comparison</button>
+        </div>
+        <div class="card-body" id="comparison-content-area">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: Create New Company -->
+  <div class="modal-overlay" id="modal-new-company">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Create New Company</h3>
+        <button class="modal-close" onclick="toggleNewCompanyModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="handleCreateCompany(event)">
+          <div class="form-group">
+            <label>Company Name *</label>
+            <input type="text" id="new-company-name" class="form-control" placeholder="e.g. Horizon Cloud Systems"
+              required>
+          </div>
+          <div class="form-group">
+            <label>Industry</label>
+            <input type="text" id="new-company-industry" class="form-control"
+              placeholder="e.g. Enterprise Cloud & Security" value="Technology">
+          </div>
+          <div class="form-group">
+            <label>Website URL</label>
+            <input type="url" id="new-company-website" class="form-control" placeholder="https://example.com">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="new-company-desc" class="form-control" rows="2"
+              placeholder="Brief company summary..."></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" onclick="toggleNewCompanyModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create Company</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Main JavaScript Controller -->
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons on DOM ready
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+
+</html>

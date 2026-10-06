@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>A Letter For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Quicksand:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            --bg1: #f7d6e6;
+            --bg2: #d9d2f5;
+            --paper: #fffafc;
+            --ink: #5a2a3c;
+            --accent: #e8798f;
+            --line: #f3d3dc;
+            --panel: rgba(255, 255, 255, 0.55);
+            margin: 0;
+            min-height: 100vh;
+            color: #4a2a3a;
+            font-family: "Quicksand", Arial, sans-serif;
+            background: linear-gradient(160deg, var(--bg1), var(--bg2));
+            background-attachment: fixed;
+        }
+
+        body.moon {
+            --bg1: #cfd8f7;
+            --bg2: #b7c3ee;
+            --paper: #f7f9ff;
+            --ink: #26355f;
+            --accent: #6f8cf0;
+            --line: #d6def8;
+            --panel: rgba(255, 255, 255, 0.55);
+        }
+
+        body.sage {
+            --bg1: #d3ecdc;
+            --bg2: #f1efd2;
+            --paper: #fbfffb;
+            --ink: #23483d;
+            --accent: #5fb38d;
+            --line: #d3eadb;
+            --panel: rgba(255, 255, 255, 0.55);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            padding: 24px 12px 4px;
+        }
+
+        header h1 {
+            font-family: "Caveat", cursive;
+            font-size: 2.6rem;
+            margin: 0;
+            color: var(--ink);
+        }
+
+        header p {
+            margin: 4px 0 0;
+            opacity: 0.7;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        .editor {
+            flex: 1 1 320px;
+            max-width: 400px;
+            background: var(--panel);
+            border: 1px solid #ffffff;
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        .preview {
+            flex: 2 1 400px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            margin: 12px 0 4px;
+            opacity: 0.8;
+        }
+
+        input[type=text],
+        input[type=date],
+        textarea {
+            width: 100%;
+            font: inherit;
+            color: #3a2030;
+            background: #ffffff;
+            border: 1px solid #e6cfd8;
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        input:focus,
+        textarea:focus,
+        button:focus {
+            outline: 2px solid var(--accent);
+        }
+
+        .emojis button {
+            background: #ffffff;
+            border: 1px solid #ecd9e0;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            padding: 4px 6px;
+            margin: 2px;
+            cursor: pointer;
+        }
+
+        .themes button {
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 8px 10px;
+            margin-right: 6px;
+            cursor: pointer;
+            font: inherit;
+            background: #ffffff;
+        }
+
+        .themes button.on {
+            border-color: var(--accent);
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #ffffff;
+            border: 0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn.ghost {
+            background: #ffffff;
+            color: var(--ink);
+            border: 1px solid #e6cfd8;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btnrow {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .btnrow .btn {
+            flex: 1;
+        }
+
+        .photo-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .photo-item img {
+            width: 44px;
+            height: 44px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .photo-item input {
+            flex: 1;
+        }
+
+        .photo-item button {
+            background: none;
+            border: 0;
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        /* The letter */
+        .letter {
+            background-color: var(--paper);
+            color: var(--ink);
+            background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 35px, var(--line) 35px, var(--line) 36px);
+            padding: 40px 44px;
+            border-radius: 6px;
+            box-shadow: 0 14px 36px rgba(90, 42, 60, 0.18);
+            font-family: "Caveat", "Comic Sans MS", cursive;
+            font-size: 1.6rem;
+            line-height: 36px;
+            min-height: 480px;
+            position: relative;
+        }
+
+        .letter:before {
+            content: "\1F319";
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 1.3rem;
+            opacity: 0.6;
+        }
+
+        .l-date {
+            font-size: 1.2rem;
+            opacity: 0.7;
+            margin-bottom: 18px;
+        }
+
+        .l-to {
+            font-size: 1.9rem;
+            font-weight: 600;
+        }
+
+        .l-body {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .l-from {
+            text-align: right;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-top: 18px;
+        }
+
+        .dim {
+            opacity: 0.45;
+        }
+
+        .l-photos {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .polaroid {
+            display: inline-block;
+            vertical-align: top;
+            background: #ffffff;
+            padding: 10px 10px 4px;
+            width: 190px;
+            margin: 14px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            line-height: 1.1;
+        }
+
+        .polaroid:nth-child(odd) {
+            transform: rotate(-3deg);
+        }
+
+        .polaroid:nth-child(even) {
+            transform: rotate(2.5deg);
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .polaroid span {
+            display: block;
+            padding: 8px 2px;
+            font-size: 1.2rem;
+            min-height: 32px;
+        }
+
+        /* Envelope screen */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 10;
+            overflow: auto;
+            padding: 24px 12px;
+            text-align: center;
+            background: linear-gradient(160deg, var(--bg1), var(--bg2));
+        }
+
+        #overlay.show {
+            display: block;
+        }
+
+        #envBox {
+            margin: 60px auto 0;
+        }
+
+        .env {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin: 0 auto;
+            background: var(--accent);
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.25);
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid #d4607a;
+            transform-origin: top;
+            transition: transform 0.7s;
+        }
+
+        .env.open .flap {
+            transform: rotateX(180deg);
+        }
+
+        .seal {
+            position: absolute;
+            top: 85px;
+            left: 130px;
+            font-size: 2.2rem;
+            transition: opacity 0.3s;
+        }
+
+        .env.open .seal {
+            opacity: 0;
+        }
+
+        #stage {
+            display: none;
+            max-width: 720px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        #stage.show {
+            display: block;
+        }
+
+        #backBtn {
+            display: none;
+            margin: 18px auto;
+        }
+
+        @media (max-width: 600px) {
+            .letter {
+                padding: 32px 20px;
+            }
+        }
+
+        @media print {
+
+            header,
+            .editor,
+            #overlay {
+                display: none;
+            }
+
+            body {
+                background: #ffffff;
+            }
+
+            .letter {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>A Letter For You &#128140;</h1>
+        <p>Write something soft for someone you love.</p>
+    </header>
+
+    <div class="wrap">
+        <div class="editor">
+            <label for="to">To</label>
+            <input type="text" id="to" placeholder="Maa, Appa, my best friend..." maxlength="60">
+
+            <label for="body">Your letter</label>
+            <textarea id="body" placeholder="Write from the heart. Say the things you never said..."></textarea>
+
+            <label>Add emojis</label>
+            <div class="emojis" id="emojis"></div>
+
+            <label for="from">From</label>
+            <input type="text" id="from" placeholder="Your name" maxlength="40">
+
+            <label for="date">Date</label>
+            <input type="date" id="date">
+
+            <label>Mood</label>
+            <div class="themes" id="themes">
+                <button type="button" data-t="rose" class="on">&#127799; Rose</button>
+                <button type="button" data-t="moon">&#127769; Moon</button>
+                <button type="button" data-t="sage">&#127811; Sage</button>
+            </div>
+
+            <label>Photos (up to 4)</label>
+            <input type="file" id="file" accept="image/*" multiple style="display:none">
+            <button type="button" class="btn ghost" id="addPhoto" style="width:100%">&#128247; Add a photo</button>
+            <div id="photoList"></div>
+
+            <div class="btnrow">
+                <button type="button" class="btn" id="sealBtn">&#128140; Seal letter</button>
+                <button type="button" class="btn ghost" id="printBtn">Save as PDF</button>
+            </div>
+        </div>
+
+        <div class="preview">
+            <div class="letter" id="letter">
+                <div class="l-date" id="lDate"></div>
+                <div class="l-to" id="lTo"></div>
+                <div class="l-body" id="lBody"></div>
+                <div class="l-photos" id="lPhotos"></div>
+                <div class="l-from" id="lFrom"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay">
+        <div id="envBox">
+            <div class="env" id="env">
+                <div class="flap"></div>
+                <div class="seal">&#128151;</div>
+            </div>
+            <p>Tap the envelope to open it</p>
+        </div>
+        <div id="stage"></div>
+        <button type="button" class="btn ghost" id="backBtn">Back to writing</button>
+    </div>
+
+    <script>
+        (function () {
+            var KEY = "letterSite.v2";
+            var MAX_PHOTOS = 4;
+            var EMOJIS = ["\uD83D\uDC8C", "\uD83C\uDF37", "\uD83C\uDF19", "\u2728", "\uD83E\uDD0D", "\uD83E\uDEF6", "\uD83C\uDF38", "\uD83E\uDD8B", "\uD83D\uDD4A\uFE0F", "\uD83C\uDF42", "\uD83C\uDF39", "\u2601\uFE0F", "\uD83E\uDD79", "\uD83D\uDCAB", "\uD83E\uDDF8", "\uD83C\uDF3B"];
+
+            function el(id) { return document.getElementById(id); }
+
+            var state = { to: "", body: "", from: "", date: "", theme: "rose", photos: [] };
+            try {
+                var saved = JSON.parse(localStorage.getItem(KEY));
+                if (saved) {
+                    for (var k in saved) { state[k] = saved[k]; }
+                }
+            } catch (e) { }
+            if (!state.date) { state.date = new Date().toISOString().slice(0, 10); }
+
+            function save() {
+                try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { }
+            }
+
+            function setText(node, text, dim) {
+                node.textContent = text;
+                if (dim) { node.classList.add("dim"); } else { node.classList.remove("dim"); }
+            }
+
+            function renderLetter() {
+                var d = new Date(state.date + "T00:00:00");
+                el("lDate").textContent = isNaN(d.getTime()) ? "" :
+                    d.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+
+                setText(el("lTo"), state.to ? "Dear " + state.to + "," : "Dear you,", !state.to);
+                setText(el("lBody"), state.body ? state.body : "Your words will appear here as you write...", !state.body);
+                setText(el("lFrom"), state.from ? "With love, " + state.from + " \uD83E\uDD0D" : "", false);
+
+                var box = el("lPhotos");
+                box.innerHTML = "";
+                state.photos.forEach(function (p) {
+                    var fig = document.createElement("div");
+                    fig.className = "polaroid";
+                    var img = document.createElement("img");
+                    img.src = p.src;
+                    img.alt = p.caption || "Photo in the letter";
+                    var cap = document.createElement("span");
+                    cap.textContent = p.caption || "";
+                    fig.appendChild(img);
+                    fig.appendChild(cap);
+                    box.appendChild(fig);
+                });
+            }
+
+            function renderPhotoList() {
+                var list = el("photoList");
+                list.innerHTML = "";
+                state.photos.forEach(function (p, i) {
+                    var row = document.createElement("div");
+                    row.className = "photo-item";
+
+                    var img = document.createElement("img");
+                    img.src = p.src;
+                    img.alt = "";
+
+                    var cap = document.createElement("input");
+                    cap.type = "text";
+                    cap.placeholder = "Caption (optional)";
+                    cap.maxLength = 40;
+                    cap.value = p.caption || "";
+                    cap.addEventListener("input", function () {
+                        state.photos[i].caption = cap.value;
+                        renderLetter();
+                        save();
+                    });
+
+                    var del = document.createElement("button");
+                    del.type = "button";
+                    del.textContent = "\u00D7";
+                    del.setAttribute("aria-label", "Remove photo");
+                    del.addEventListener("click", function () {
+                        state.photos.splice(i, 1);
+                        renderPhotoList();
+                        renderLetter();
+                        save();
+                    });
+
+                    row.appendChild(img);
+                    row.appendChild(cap);
+                    row.appendChild(del);
+                    list.appendChild(row);
+                });
+                el("addPhoto").style.display = state.photos.length >= MAX_PHOTOS ? "none" : "block";
+            }
+
+            // Shrinks big photos so they fit in browser storage
+            function shrink(file, done) {
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var img = new Image();
+                    img.onload = function () {
+                        var scale = Math.min(1, 700 / Math.max(img.width, img.height));
+                        var c = document.createElement("canvas");

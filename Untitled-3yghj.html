@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>A Letter For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Quicksand:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>A Letter For You &#128140;</h1>
+        <p>Write something soft for someone you love.</p>
+    </header>
+
+    <div class="wrap">
+        <div class="editor">
+            <label for="to">To</label>
+            <input type="text" id="to" placeholder="Maa, Appa, my best friend..." maxlength="60">
+
+            <label for="body">Your letter</label>
+            <textarea id="body" placeholder="Write from the heart. Say the things you never said..."></textarea>
+
+            <label>Add emojis</label>
+            <div class="emojis" id="emojis"></div>
+
+            <label for="from">From</label>
+            <input type="text" id="from" placeholder="Your name" maxlength="40">
+
+            <label for="date">Date</label>
+            <input type="date" id="date">
+
+            <label>Mood</label>
+            <div class="themes" id="themes">
+                <button type="button" data-t="rose" class="on">&#127799; Rose</button>
+                <button type="button" data-t="moon">&#127769; Moon</button>
+                <button type="button" data-t="sage">&#127811; Sage</button>
+            </div>
+
+            <label>Photos (up to 4)</label>
+            <input type="file" id="file" accept="image/*" multiple style="display:none">
+            <button type="button" class="btn ghost" id="addPhoto" style="width:100%">&#128247; Add a photo</button>
+            <div id="photoList"></div>
+
+            <div class="btnrow">
+                <button type="button" class="btn" id="sealBtn">&#128140; Seal letter</button>
+                <button type="button" class="btn ghost" id="printBtn">Save as PDF</button>
+            </div>
+        </div>
+
+        <div class="preview">
+            <div class="letter" id="letter">
+                <div class="l-date" id="lDate"></div>
+                <div class="l-to" id="lTo"></div>
+                <div class="l-body" id="lBody"></div>
+                <div class="l-photos" id="lPhotos"></div>
+                <div class="l-from" id="lFrom"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay">
+        <div id="envBox">
+            <div class="env" id="env">
+                <div class="flap"></div>
+                <div class="seal">&#128151;</div>
+            </div>
+            <p>Tap the envelope to open it</p>
+        </div>
+        <div id="stage"></div>
+        <button type="button" class="btn ghost" id="backBtn">Back to writing</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

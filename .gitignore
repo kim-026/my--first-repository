@@ -1,0 +1,21 @@
+# Executables and object files
+*.exe
+*.o
+*.obj
+
+# Python cache & bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# SQLite databases
+*.db
+*.sqlite3
+
+# Editor settings
+.vscode/
+
+# Windows system files
+Thumbs.db
+Desktop.ini
+

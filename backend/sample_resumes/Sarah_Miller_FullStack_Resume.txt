@@ -1,0 +1,30 @@
+Sarah Miller
+sarah.miller.dev@example.com | +1 (206) 555-7890 | Seattle, WA
+linkedin.com/in/sarah-miller-web | github.com/sarahmiller-dev
+
+SUMMARY
+Versatile Full-Stack Software Engineer with 4 years building high-performance web applications using React, TypeScript, Node.js, and Python.
+
+CORE COMPETENCIES
+Languages: JavaScript, TypeScript, Python, HTML5, CSS3, SQL
+Frontend: React, Next.js, Redux, Tailwind CSS, Responsive Design
+Backend & APIs: Node.js, Express, FastAPI, REST API, GraphQL
+Databases: PostgreSQL, MongoDB, Redis, SQLite
+DevOps & Cloud: Docker, AWS, Git, GitHub Actions, CI/CD
+Soft Skills: Communication, Critical Thinking, Time Management, Teamwork, Agile
+
+PROFESSIONAL EXPERIENCE
+Full Stack Developer | CloudFlow Tech (2021 - Present)
+- Engineered responsive client dashboard using React 18, TypeScript, and Tailwind CSS.
+- Developed backend microservices using Node.js, Express, and PostgreSQL handling 50k active tenants.
+- Configured CI/CD automation with GitHub Actions and Docker containers deployed to AWS ECS.
+
+Frontend Developer | PixelCraft Media (2020 - 2021)
+- Developed modern web portals with React, Next.js, and RESTful APIs.
+- Improved Core Web Vitals score from 62 to 94 through code-splitting and asset optimization.
+
+EDUCATION
+Bachelor of Science in Computer Science | University of Washington (2020)
+
+CERTIFICATIONS
+- AWS Certified Developer - Associate (2022)
